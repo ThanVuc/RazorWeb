@@ -1,0 +1,51 @@
+@page "/blog/Chinhsuabaiviet/{id:int?}"
+@model RazorWeb.Pages_Blog.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@section head{
+    <style>
+        .form-group {
+            margin-bottom: 5px;
+        }
+    </style>
+}
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+<p>@Html.DisplayFor(model => model.Article.Title)</p>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Article.Artical_ID" />
+            <div class="form-group">
+                <label asp-for="Article.Title" class="control-label"></label>
+                <input asp-for="Article.Title" class="form-control" />
+                <span asp-validation-for="Article.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Article.Created" class="control-label"></label>
+                <input asp-for="Article.Created" class="form-control" />
+                <span asp-validation-for="Article.Created" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Article.Content" class="control-label"></label>
+                <textarea asp-for="Article.Content" rows="7" class="form-control" ></textarea>
+                <span asp-validation-for="Article.Content" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

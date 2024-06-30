@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using RazorWeb.Model
+
+@inject SignInManager<AppUser> SignIn
+@inject UserManager<AppUser> Manager
+
+@{
+}
+<ul class="navbar-nav">
+    @if (SignIn.IsSignedIn(User))
+    {
+        
+            <li class="nav-item">
+                    
+                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index">
+                        Xin chào, @Manager.GetUserName(User)
+                    </a>
+            </li>
+
+        <li class="nav-item">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Đăng Kí</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Đăng Nhập</a>
+        </li>
+    }
+</ul>

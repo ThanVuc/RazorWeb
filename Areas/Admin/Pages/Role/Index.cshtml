@@ -1,0 +1,78 @@
+﻿@page "/admin/roles"
+@model App.Admin.Role.IndexModel
+@{
+}
+
+@{
+    ViewData["Title"] = "Các bài viết";
+}
+
+@section head{
+    <style>
+        table tbody td button{
+            width: 6vw;
+            height: 2.5vw;
+            margin-left: 1vw;
+        }
+    </style>
+}
+
+<partial name="_StatusMessage" model="@Model.StatusMessage" />
+
+ <h1>List Roles:</h1>
+  
+ <hr />
+ <div class="d-flex flex-row justify-content-between">
+    <form method="post" asp-page-handler="StartCreateRole" class="mb-2" asp-page="./CreateOrUpdate">
+        <input type="submit" value="Create Role" class="btn btn-outline-success">
+    </form>
+
+    <a href="../admin/user" style="font-size: 20px; color: black; font-weight: bold" >Users</a>
+ </div>
+
+
+ <table class="table">
+     <thead>
+         <tr>
+             <th>
+                 Role Name
+             </th>
+            <th class="text-center" >
+                 Task
+             </th>
+         </tr>
+     </thead>
+     <tbody>
+        @if (Model.Roles != null)
+        {
+            @foreach (var item in Model.Roles)
+            {
+                <tr>
+                 <td>
+                     @Html.DisplayFor(modelItem => item.Name)
+                        @if (item.Claims != null)
+                        {
+                            <ul>
+                                @foreach (var cl in item.Claims)
+                                {
+                                    <li><small>@cl</small></li>
+                                }
+                            </ul>
+                        }
+                    </td>
+                 <td class="d-flex flex-row justify-content-center">
+                    
+
+                     <form method="post" class="mb-2">
+                            <button asp-page-handler="StartDelete" asp-page="./Delete" type="submit" class="btn btn-danger btn-sm" name="Input.ID" value="@item.Id">Delete</button>
+                    </form>
+
+                    <form method="post" class="mb-2">
+                        <button asp-page-handler="StartUpdateRole" asp-page="./CreateOrUpdate" type="submit" name="Input.Id" value="@item.Id" class="btn btn-warning btn-sm ">Update</button>
+                    </form>
+                 </td>
+                </tr>
+            }
+         }
+     </tbody>
+ </table>

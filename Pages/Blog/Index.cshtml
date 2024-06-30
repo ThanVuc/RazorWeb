@@ -1,0 +1,72 @@
+﻿@page
+@model RazorWeb.Pages_Blog.IndexModel
+@using RazorWeb.Helper
+
+@{
+    ViewData["Title"] = "Các bài viết";
+    int stt = 0;
+}
+
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+
+
+<h1>Danh Sách Bài Viết</h1>
+<form method="get" asp-page="./index" class="m-3" >
+    <label for="SerchString">Tìm Kiếm</label>
+    <input type="text" id="SerchString" name="SerchString" />
+    <input type="submit" value="Tìm" />
+</form>
+
+<p >
+    <a class="btn btn-outline-success" asp-page="Create">Tạo Mới</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th >
+                @Html.DisplayNameFor(model => model.Article[0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Article[0].Created)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Article) {
+        <tr>
+            <td>
+                @(++stt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Created)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Artical_ID">Chỉnh Sửa</a> |
+                <a asp-page="./Details" asp-route-id="@item.Artical_ID">Xem</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Artical_ID">Xóa</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@{
+    PagingModel paging = new PagingModel()
+            {
+                CurrentPage = Model.CurrentPage,
+                TotalPage = Model.TotalPage,
+                GenerateUrl = (p) => Url.Page("/blog/index", new
+                {
+                    p = p
+                })
+            };
+}
+
+<partial name="_Paging" model="paging" />
+

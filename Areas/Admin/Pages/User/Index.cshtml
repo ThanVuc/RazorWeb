@@ -1,0 +1,76 @@
+﻿@page "/admin/user"
+@model App.Admin.User.IndexModel
+
+@{
+}
+
+@{
+    ViewData["Title"] = "Users";
+    int stt = 1;
+}
+
+@section head{
+    <style>
+        table tbody td button{
+            width: 6vw;
+            height: 2.5vw;
+            margin-left: 1vw;
+        }
+    </style>
+}
+
+<partial name="_StatusMessage" model="@Model.StatusMessage" />
+
+ <h1>Users:</h1>
+  
+ <hr />
+
+ <table class="table">
+     <thead>
+         <tr>
+             <th>STT</th>
+             <th>User</th>
+             <th>Roles</th>
+            <th class="text-center" >Task</th>
+             <th></th>
+         </tr>
+     </thead>
+     <tbody>
+        @if (Model.Users != null)
+        {
+            @foreach (var item in Model.Users)
+            {
+                <tr>
+                 <td>
+                     @(stt++)
+                 </td>
+                 <td>
+                     @item.UserName
+                 </td>
+                 <td>
+                        <a asp-page="./EditRole" name="id" asp-route-id="@item.Id" >@item.RolesName</a>
+                 </td>
+                 <td class="d-flex flex-row justify-content-center">
+                    <form method="get" class="mb-2">
+                            <button asp-page="./EditRole" type="submit" name="id" value="@item.Id" class="btn btn-warning btn-sm">Edit</button>
+                    </form>
+                 </td>
+                </tr>
+            }
+         }
+     </tbody>
+ </table>
+
+@{
+    PagingModel paging = new PagingModel()
+            {
+                CurrentPage = Model.CurrentPage,
+                TotalPage = Model.TotalPage,
+                GenerateUrl = (p) => Url.Page("./index", new
+                {
+                    p = p
+                })
+            };
+}
+
+<partial name="_Paging" model="paging" />

@@ -1,0 +1,49 @@
+﻿@page
+@model App.Admin.Role.CreateModel
+@{
+    ViewData["Title"] = "Create Role";
+}
+
+<partial name="_StatusMessage" model="@Model.StatusMessage" />
+
+<h1>@Model.btnText</h1>
+
+<h4>Role</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form method="post" asp-page-handler="AddOrUpdate" >
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="Input.ID" />
+            <input type="hidden" asp-for="IsUpdate" />
+            
+            <div class="form-group mb-2">
+                <label asp-for="Input.Name" class="control-label"></label>
+                <input asp-for="Input.Name" class="form-control" />
+                <span asp-validation-for="Input.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="@Model.btnText" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <hr />
+    <a class="" asp-page="./AddClaims" asp-route-roleID="@Model.Input.ID">+ Add Claims</a>
+    <p style="margin-bottom: 5px" >List Role Claims: </p>
+    <ul>
+        @if (Model.Claims != null)
+        {
+            @foreach (var claim in Model.Claims)
+            {
+                <li><a asp-page="./EditClaims" asp-route-claimid="@claim.Id" >@claim.ClaimType : @claim.ClaimValue</a></li>
+            }
+        }
+    </ul>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>

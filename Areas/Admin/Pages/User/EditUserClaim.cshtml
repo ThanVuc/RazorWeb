@@ -1,0 +1,52 @@
+﻿@page "/admin/user/EditRole/EditRoleClaim/"
+@model App.Admin.Role.EditUserClaim
+@{
+    ViewData["Title"] = "EditClaim";
+}
+
+<partial name="_StatusMessage" model="@Model.StatusMessage" />
+
+<h1>Edit Claim: @Model.user.UserName</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form method="post" >
+            <div asp-validation-summary="All" class="text-danger"></div>
+            @if (Model.IsAdd)
+            {
+                <input type="hidden" name="id" value="@Model.user.Id" />
+            } else
+            {
+                <input type="hidden" name="claimID" value="@Model.claimID" />
+            }
+            <div class="form-group mb-2">
+                <label asp-for="Input.ClaimType" class="control-label"></label>
+                <input asp-for="Input.ClaimType" class="form-control" />
+                <span asp-validation-for="Input.ClaimType" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <label asp-for="Input.ClaimValue" class="control-label"></label>
+                <input asp-for="Input.ClaimValue" class="form-control" />
+                <span asp-validation-for="Input.ClaimValue" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                @if (Model.IsAdd)
+                {
+                    <input type="submit" class="btn btn-success" asp-page-handler="AddClaim" value="Add" />
+                } else
+                {
+                    <input type="submit" class="btn btn-primary" value="Update" />
+                    <input type="submit" class="btn btn-danger" asp-page-handler="DeleteClaims" value="Delete" />
+                }
+                
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./EditRole" asp-route-id="@Model.user.Id" >Back To Edit</a>
+</div>

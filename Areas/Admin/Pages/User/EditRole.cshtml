@@ -1,0 +1,86 @@
+﻿@page
+@model App.Admin.User.EditRole
+@{
+    ViewData["Title"] = "Create Role";
+
+}
+
+<partial name="_StatusMessage" model="@Model.StatusMessage" />
+
+<h1>Assign Role | @Model.user.UserName</h1>
+
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form method="post" >
+            <div asp-validation-summary="All" class="text-danger"></div>
+            
+            <div class="form-group mb-2">
+                <label asp-for="ListRoles" class="control-label">Set Role For User: </label>
+                @{
+                    // @Html.ListBoxFor(m => m.ListRoles, Model.AllRoles, new
+                    //     {
+                    //         id = "id-select-roles",
+                    //         @class = "w-50"
+                    //     })
+                }
+                <select class="w-50" id="id-select-roles" asp-for="ListRoles">
+                    @foreach (var r in Model.AllRoles)
+                    {
+                        <option  value="@r">@r</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input style="float: left" type="submit" value="Update" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    @if (Model.RoleClaims != null)
+    {
+        <p class="mb-0 mt-2" >List Role Claims: </p>
+        <ul>
+            @foreach (var roleClaims in Model.RoleClaims)
+            {
+                <li><a>@roleClaims.ClaimType : @roleClaims.ClaimValue</a></li>
+            }
+        </ul>
+    }
+</div>
+
+<div>
+    @if (Model.UserClaims != null)
+    {
+        <a asp-page="./EditUserClaim" asp-page-handler="AddClaim" asp-route-id="@Model.user.Id"> + Add User Claim</a>
+        <p class="mb-0 mt-2">List User Claims: </p>
+        <ul>
+            @foreach (var userClaims in Model.UserClaims)
+            {
+                <li><a asp-page="./EditUserClaim" asp-route-claimid="@userClaims.Id" >@userClaims.ClaimType : @userClaims.ClaimValue</a></li>
+            }
+        </ul>
+    }
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts{
+    <script src="~/lib/multiple-select/multiple-select.min.js"></script>
+    <link rel="stylesheet" href="~/lib/multiple-select/multiple-select.min.css" />
+
+    <script>
+        $("#id-select-roles").multipleSelect({
+            selectAll: false,
+            keepOpen: false,
+            isOpen: false,
+        });
+    </script>
+
+}

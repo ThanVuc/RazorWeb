@@ -1,0 +1,105 @@
+﻿@model RazorWeb.Helper.PagingModel
+
+@{
+    int currentPage = Model.CurrentPage;
+    int totalPage = Model.TotalPage;
+    Func<int?, string>? generateUrl = Model.GenerateUrl;
+
+    if (currentPage < 1) currentPage = 1;
+    if (currentPage > totalPage) currentPage = totalPage;
+
+    int? prev = null, next = null;
+
+    if (currentPage > 1) prev = currentPage - 1;
+    if (currentPage < totalPage) next = currentPage + 1;
+
+    List<int> pageRange = new List<int>();
+    //The page of each side
+    int delta = 5;
+    //The Page is remain when was show
+    int remains = delta * 2;
+    //current is central. ex: 6
+    pageRange.Add(currentPage);
+
+    //Handle Load nums of page, 1 screen
+    for (int i=1; i<=delta; i++)
+    {
+        //add to left, when left has not reached 1. 
+        if (currentPage-i >= 1)
+        {
+            // Descending -> Left 1 unit.  1 2 3 4  6
+            pageRange.Insert(0,currentPage-i);
+            //Show 1, decrease 1 unit of remains
+            remains--;
+        }
+
+        //add to right, when right has not reached max page
+        if (currentPage+i <= totalPage)
+        {
+            //Ascending -> right 1 unit. 6 7 8 9 10 11
+            pageRange.Add(currentPage + i);
+            remains--;
+        }
+        // 1 2 3 4 5 6 7 8 9 10 11
+    }
+
+    //It has not load fully
+    if (remains > 0)
+    {
+        // Left meet 1
+        if (pageRange.First() == 1)
+        {
+            //Push all -> Right
+            for(int i=1; i<= remains; i++)
+            {
+                pageRange.Add(pageRange.Last() + 1);
+            }
+        } else
+        {
+            //right meet max
+            //Insert -> Left
+            for(int i=1; i <= remains; i++)
+            {
+                pageRange.Insert(0,pageRange.First()-1);
+            }
+        }
+    }
+}
+
+@*Handle Paging Bar + Generate Url for btn*@
+<ul class="pagination" style="margin-left: 28%">
+    @*Handle Prev Btn*@
+    @if (prev != null)
+    {
+        <li class="page-item"><a class="page-link" href="@generateUrl.Invoke(prev)">Previous</a></li>
+    }
+    else
+    {
+        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+    }
+
+
+    @*Handle Page Range Number*@
+    @foreach (int pageNum in pageRange)
+    {
+        @if (pageNum != currentPage)
+        {
+            <li class="page-item"><a class="page-link" href="@generateUrl.Invoke(pageNum)">@pageNum</a></li>
+        } else
+        {
+            <li class="page-item active"><a class="page-link" href="#">@pageNum</a></li>
+        }
+    }
+
+    @*Handle Next Btn*@
+    @if (next != null)
+    {
+        <li class="page-item"><a class="page-link" href="@generateUrl.Invoke(next)">Next</a></li>
+    }
+    else
+    {
+        <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+    }
+</ul>
+
+
